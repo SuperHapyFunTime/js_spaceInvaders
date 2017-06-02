@@ -28,6 +28,7 @@ var lifesLeft;
 var starMoveSpeed;
 var isDead;
 
+// test to see if i have git working
 
 function setup() {	
 	isDead = false;
