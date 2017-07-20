@@ -6388,7 +6388,7 @@ exports.make = makePostTable;
 // The `sfnt` wrapper provides organization for the tables in the font.
 // It is the top-level data structure in a font.
 // https://www.microsoft.com/typography/OTSPEC/otff.htm
-// Recommendations for creating OpenType Fonts:
+// Recommendations for creating OpenType fonts:
 // http://www.microsoft.com/typography/otspec140/recom.htm
 
 'use strict';
