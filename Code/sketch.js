@@ -354,42 +354,100 @@ function firebaseSetup() {
     firebase.initializeApp(config);
     // console.log(firebase);
 
-    var database = firebase.database();
-    var ref = database.ref('highscorelist');
-    ref.on('value', gotData, errData);
+    // var database = firebase.database();
+    // var ref = database.ref('highscorelist');
+   // ref.on('value', gotData, errData);
 
+    var playersRef = firebase.database().ref("highscorelist");
+
+
+    // playersRef.orderByChild("score").on("child_added", function(data) {
+    //     highScoreList.push([data.val().name, data.val().score]);
+    // });
+
+    var ref = firebase.database().ref("highscorelist");
+    ref.once('value')
+        .then(function () {
+            gotData(ref);
+        })
+        .catch(function (err) {
+            console.log('Error', err.code);
+        });
+
+
+    // for(var i = 0; i <= highScoreList.length; i++){
+    //     console.log(highScoreList);
+    // }
+
+
+    // var highScore = firebase.database().ref("highscorelist/");
+    // highScore.orderByValue().on("value", function(data) {
+    //     data.forEach(function(data) {
+    //         console.log(data.val().name + " has a score of  " + data.val().score);
+    //     });
+    //
+    // });
+//===================================================================
+
+
+    // var scoresRef = firebase.database().ref("highscorelist")
+    // scoresRef.orderByValue().on("score", function(snapshot) {
+    //     snapshot.forEach(function(data) {
+    //         console.log("The " + data.val().name + " dinosaur's score is " + data.val().score);
+    //     });
+    // });
+
+
+//===================================================================
+
+
+
+
+
+
+
+    //gotData();
     // var data = {
-    // name : "Coco",
-    // 	score : 3
+    // name : "Aaron",
+    // 	score : 220
     // }
     // ref.push(data);
 }
 
-function gotData(data) {
-    var scorelist = data.val();
-    var scorelistCopy = scorelist;
-    var keys = Object.keys(scorelist);
-    var highestScore = 0;
-    var highestScoreKey;
+function gotData(ref) {
+    var highScoreList = [];
 
-    for (var i = 0; i < keys.length; i++) {
-        var k = keys[i];
-        var name = scorelistCopy[k].name;
-        var score = scorelistCopy[k].score;
+    ref.orderByChild("score").on("child_added", function(data) {
+        highScoreList.push([data.val().name, data.val().score]);
+        console.log(data.val().name, data.val().score);
+    });
 
-        if (highestScore < score) {
-            highestScore = score;
-            highestScoreObject = scorelistCopy[k];
-            highestScoreKey = k;
-        }
-    }
 
-    for(var i = 0; i < scorelistCopy.length; i++) {
-        if(scorelistCopy[i].id === id) {
-            data.splice(i, 1);
-            break;
-        }
-    }
+
+    // var scorelist = data.val();
+    // var scorelistCopy = scorelist;
+    // var keys = Object.keys(scorelist);
+    // var highestScore = 0;
+    // var highestScoreKey;
+    //
+    // for (var i = 0; i < keys.length; i++) {
+    //     var k = keys[i];
+    //     var name = scorelistCopy[k].name;
+    //     var score = scorelistCopy[k].score;
+    //
+    //     if (highestScore < score) {
+    //         highestScore = score;
+    //         highestScoreObject = scorelistCopy[k];
+    //         highestScoreKey = k;
+    //     }
+    // }
+    //
+    // for(var i = 0; i < scorelistCopy.length; i++) {
+    //     if(scorelistCopy[i].id === id) {
+    //         data.splice(i, 1);
+    //         break;
+    //     }
+    // }
 }
 
 function errData(err) {
