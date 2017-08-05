@@ -356,55 +356,33 @@ function firebaseSetup() {
 
     // var database = firebase.database();
     // var ref = database.ref('highscorelist');
-   // ref.on('value', gotData, errData);
+    // ref.on('value', gotData, errData);
 
-    var playersRef = firebase.database().ref("highscorelist");
+    // var playersRef = firebase.database().ref("highscorelist");
 
 
     // playersRef.orderByChild("score").on("child_added", function(data) {
     //     highScoreList.push([data.val().name, data.val().score]);
     // });
 
-    var ref = firebase.database().ref("highscorelist");
-    ref.once('value')
-        .then(function () {
-            gotData(ref);
-        })
-        .catch(function (err) {
-            console.log('Error', err.code);
-        });
-
-
-    // for(var i = 0; i <= highScoreList.length; i++){
-    //     console.log(highScoreList);
-    // }
-
-
-    // var highScore = firebase.database().ref("highscorelist/");
-    // highScore.orderByValue().on("value", function(data) {
-    //     data.forEach(function(data) {
-    //         console.log(data.val().name + " has a score of  " + data.val().score);
-    //     });
+    // var ref = firebase.database().ref("highscorelist");
+    // var listOfScores = [];
+    // var lisOfNames = [];
     //
-    // });
-//===================================================================
-
-
-    // var scoresRef = firebase.database().ref("highscorelist")
-    // scoresRef.orderByValue().on("score", function(snapshot) {
-    //     snapshot.forEach(function(data) {
-    //         console.log("The " + data.val().name + " dinosaur's score is " + data.val().score);
+    //
+    // ref.once('value')
+    //     .then(function () {
+    //         ref.orderByChild("score").on("child_added", function (data) {
+    //             listOfScores.push(data.val().score);
+    //             lisOfNames.push(data.val().name)
+    //             console.log(data.val().name, data.val().score);
+    //         });
+    //         console.log("This needs to come after the array");
+    //     })
+    //     .catch(function (err) {
+    //         console.log('Error', err.code);
     //     });
-    // });
-
-
-//===================================================================
-
-
-
-
-
-
+    
 
     //gotData();
     // var data = {
@@ -414,13 +392,23 @@ function firebaseSetup() {
     // ref.push(data);
 }
 
-function gotData(ref) {
-    var highScoreList = [];
+function getHighscore() {
+    var leaderboardSize = 6;
 
-    ref.orderByChild("score").on("child_added", function(data) {
-        highScoreList.push([data.val().name, data.val().score]);
-        console.log(data.val().name, data.val().score);
-    });
+    var rootRef = new Firebase('https://space-invaders-1b663.firebaseio.com');
+    var highestScoreRef = rootRef.child("highscorelist")
+
+
+    var highestScoreRef = highestScoreRef.limit(leaderboardSize);
+}
+
+function gotData(ref) {
+
+
+
+
+
+
 
 
 
