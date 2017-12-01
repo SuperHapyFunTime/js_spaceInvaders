@@ -26,15 +26,20 @@ var lifesLeft;
 var starMoveSpeed;
 var isDead;
 var scoreboardDiv;
+var levelCounter = 1;
+var firstBulletCounter = 0;
+var blinkThreeTimes = 0;
 
 function setup() {
+    levelCounter++;
     scoreboardDiv = document.getElementById('scoreboardContainer');
     scoreboardDiv.style.display = 'none';
-    firebaseSetup();
-    // Move the canvas so it's inside our <div id="sketch-holder">.
+    if (levelCounter <= 0) {
+        firebaseSetup();
+        isDead = false;
+        hasGameStarted = false;
+    }
 
-    isDead = false;
-    hasGameStarted = false;
     canShoot = 0;
     shipSpriteXPos = 25;
     shipSpriteYPos = 677.5;
@@ -70,6 +75,7 @@ function draw() {
     isGameOver();
     drawLineScoreDivide();
     displayShipSprites(lifesLeft, shipSpriteXPos, shipSpriteYPos);
+    // locationForShooterInvaders();
 
     millisecond = millis();
     seconds = second();
@@ -80,7 +86,6 @@ function draw() {
         imageMode(CENTER);
         image(mainLogo, width / 2, height / 3.5, mainLogo.width * 1.1, mainLogo.height * 1.1);
         displayCreditText();
-
         displayStartButton();
     }
     if (hasGameStarted && !isDead) {
@@ -90,10 +95,11 @@ function draw() {
         ship.move();
         movementsForInvaders()
         removingBulletsIfHitInvader();
-        removeInvaderIfHitWithBullet(leftShield);
         showShields(leftShield);
         showShields(middleShield);
         showShields(rightShield);
+        removeInvaderIfHitWithBullet(leftShield, middleShield, rightShield);
+        gotoNextLevel();
     }
 }
 
@@ -103,11 +109,12 @@ function preload() {
 
 function keyPressed() {
     if (key === " ") {
-        if (millisecond >= canShoot) {
+        if (millisecond >= canShoot && firstBulletCounter > 0) {
             var bullet = new Bullet(ship.x, height - 90);
             bullets.push(bullet);
             canShoot = millisecond + 650;
         }
+        firstBulletCounter += 1;
     }
     if (key === " " && !hasGameStarted) {
         hasGameStarted = true;
@@ -165,22 +172,34 @@ function removingBulletsIfHitInvader() {
     }
 }
 
-function removeInvaderIfHitWithBullet(shieldArray) {
+function removeInvaderIfHitWithBullet(shieldArray, shieldArray2, shieldArray3) {
     for (var i = 0; i < bullets.length; i++) {
         bullets[i].show();
         bullets[i].move();
-
         for (var j = 0; j < indavders.length; j++) {
             if (bullets[i].hits(indavders[j])) {
                 indavders[j].die();
                 ship.updateScore(indavders[j].invaderValue);
                 bullets[i].hitAInvader();
             }
+
         }
 
         for (var k = 0; k < shieldArray.length; k++) {
             if (bullets[i].hits(shieldArray[k])) {
                 shieldArray[k].hit();
+                bullets[i].hitAInvader();
+            }
+        }
+        for (var l = 0; l < shieldArray2.length; l++) {
+            if (bullets[i].hits(shieldArray2[l])) {
+                shieldArray2[l].hit();
+                bullets[i].hitAInvader();
+            }
+        }
+        for (var m = 0; m < shieldArray3.length; m++) {
+            if (bullets[i].hits(shieldArray3[m])) {
+                shieldArray3[m].hit();
                 bullets[i].hitAInvader();
             }
         }
@@ -197,6 +216,23 @@ function movementsForInvaders() {
         dropDown(hitEdge);
     }
 }
+
+// function locationForShooterInvaders() {
+//     if (indavders.length > 0) {
+//         for (var i = 0; i < indavders.length; i++) {
+//                 if (indavders[i + 10] === undefined) {
+//                     if (indavders[i + 20] === undefined) {
+//                         if (indavders[i + 30] === undefined) {
+//                             if (indavders[i + 40] === undefined) {
+//
+//                             }
+//                         }
+//                     }
+//                 }
+//         }
+//
+//     }
+// }
 
 function creatingLineOfInvaders(xPos, yPos, radius, invaderValue, invaderColour) {
     var xReset = xPos;
@@ -251,12 +287,26 @@ function isGameOver() {
     }
 }
 
+function gotoNextLevel() {
+    var scoreTemp = ship.score;
+    if (indavders.length <= 0) {
+        bullets.length = 0;
+        displayNextLevel();
+        if (blinkThreeTimes >= 160) {
+            setup();
+            ship.score = scoreTemp;
+            blinkThreeTimes = 0
+        }
+    }
+
+}
+
 function gameOver() {
     isDead = true;
     fill(255, 0, 0);
     strokeWeight(0);
     textSize(75);
-    text("GAME OVER", 75, 275)
+    text("GAME OVER", 75, 275);
     displayStartButton();
     displayAgain();
 
@@ -286,6 +336,16 @@ function displayStartButton() {
         text("Press Space", 275, 475); // x, y
         text("to Start", 315, 515);
 
+    }
+}
+
+function displayNextLevel() {
+    if (seconds % 2 === 0) {
+        fill(255);
+        strokeWeight(0);
+        textSize(25);
+        text("Level " + levelCounter, 325, 250); // x = width, y
+        blinkThreeTimes++;
     }
 }
 
@@ -384,8 +444,8 @@ function gotData(data) {
         }
     }
 
-    for(var i = 0; i < scorelistCopy.length; i++) {
-        if(scorelistCopy[i].id === id) {
+    for (var i = 0; i < scorelistCopy.length; i++) {
+        if (scorelistCopy[i].id === id) {
             data.splice(i, 1);
             break;
         }
