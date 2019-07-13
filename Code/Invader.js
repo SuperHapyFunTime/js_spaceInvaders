@@ -7,11 +7,11 @@ function Invader(x, y, r, invadersScoreWorth, invaderColour){
 	this.invaderValue= invadersScoreWorth;
 	this.colour;
 
-	var blue_Invader = loadImage("/Sprites/Blue_Invader.png");
-	var green_Invader = loadImage("/Sprites/Green_Invader.png");
-	var neon_Invader = loadImage("/Sprites/Neon_Blue.png");
-	var pink_Invader = loadImage("/Sprites/Pink_Invader.png");
-	var red_Invader = loadImage("/Sprites/Red_Invader.png");
+	var blue_Invader = loadImage("../Sprites/Blue_Invader.png");
+	var green_Invader = loadImage("../Sprites/Green_Invader.png");
+	var neon_Invader = loadImage("../Sprites/Neon_Blue.png");
+	var pink_Invader = loadImage("../Sprites/Pink_Invader.png");
+	var red_Invader = loadImage("../Sprites/Red_Invader.png");
 
 	this.show = function(){
 		imageMode(CENTER);

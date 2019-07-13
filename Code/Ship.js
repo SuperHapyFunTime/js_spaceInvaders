@@ -4,7 +4,7 @@ function Ship(){
 	this.xDir = 0;
 	this.score = 0;
 
-	var shipPic = loadImage("/Sprites/Hero.png"); 
+	var shipPic = loadImage("../Sprites/Hero.png");
 
 	this.show = function(){
 		imageMode(CENTER)

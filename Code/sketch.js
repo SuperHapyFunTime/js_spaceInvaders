@@ -47,8 +47,8 @@ function setup() {
 	createShields(50, 520, 5, leftShield); 
 	createShields(325, 520, 5, middleShield); 
 	createShields(575, 520, 5, rightShield); 
-	mainLogo = loadImage("/Sprites/Space_Invaders_log_V2.png");
-	shipSprite = loadImage("/Sprites/HeroLives.png");
+	mainLogo = loadImage("../Sprites/Space_Invaders_log_V2.png");
+	shipSprite = loadImage("../Sprites/HeroLives.png");
 	ship = new Ship();
 	creatingLineOfInvaders(numOfInvadersPerLine, invaderXPos, invaderY, invaderRadius, invaderValue, "RED");
 	textFont(oldSchoolFont);
@@ -93,7 +93,7 @@ function draw() {
 }
 
 function preload(){
-	oldSchoolFont = loadFont("/Fonts/freaky-fonts_service-games-oldskool/Oldskool_Hollow.ttf");
+	oldSchoolFont = loadFont("../Fonts/freaky-fonts_service-games-oldskool/Oldskool_Hollow.ttf");
 }
 
 function keyPressed(){
